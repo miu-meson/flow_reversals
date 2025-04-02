@@ -62,8 +62,8 @@
 
 	-	modal_${Ra}_${Pr}_${N}_${Set}.asc : 
 	[1]t [2]mode1 [3]mode2 [4]mode3 [5]mode4 [6]mode5 [7]mode6
-																								[8]mode1 	[9]mode2 	[10]mode3 [11]mode4 [12]mode5 [13]mode6
-																								[14]mode1 [15]mode2 [16]mode3 [17]mode4 [18]mode5 [19]mode6	
+	[8]mode1 [9]mode2 [10]mode3 [11]mode4 [12]mode5 [13]mode6
+	[14]mode1 [15]mode2 [16]mode3 [17]mode4 [18]mode5 [19]mode6	
 	
 	which correspond to the Nusselt numbers, the energy budget and the decomposition
 	of the global angular impulse (see Castillo, Sergent & Rossi, 2016) and the 
