@@ -52,13 +52,16 @@
 
 	Three types of time-series were produced
 	
-	- nusselt_${Ra}_${Pr}_${N}_${Set}.asc : [1]t 	[2]nuvol 	[3]nutop 	[4]nubot 	[5]nuviscous 	[6]nuthermal 	[7]nuleft 	[8]nuright 
+	- nusselt_${Ra}_${Pr}_${N}_${Set}.asc : 
+	[1]t [2]nuvol [3]nutop [4]nubot [5]nuviscous [6]nuthermal [7]nuleft [8]nuright 
 	
-	- global_${Ra}_${Pr}_${N}_${Set}.asc	: [1]t 	[2]l2d 		[3]ekin 	[4]enst 	[5]circul 		[6]phi_y 			[7]epot     [8]bpot 
-																								[9]phi_b2 [10]phi_d [11]etemp [12]phi_b3 		[13]m2d 			[14]ia2d 		[15]ib2d,      
-																								[16]mc2d 	[17]ic2d 	[18]dist 	[19]id2d
+	- global_${Ra}_${Pr}_${N}_${Set}.asc: 
+	[1]t [2]l2d [3]ekin [4]enst [5]circul [6]phi_y 
+	[7]epot [8]bpot [9]phi_b2 [10]phi_d [11]etemp [12]phi_b3 
+	[13]m2d [14]ia2d [15]ib2d, [16]mc2d [17]ic2d [18]dist [19]id2d
 
-	-	modal_${Ra}_${Pr}_${N}_${Set}.asc		: [1]t 	[2]mode1 	[3]mode2 	[4]mode3 	[5]mode4 	[6]mode5 	[7]mode6
+	-	modal_${Ra}_${Pr}_${N}_${Set}.asc : 
+	[1]t [2]mode1 [3]mode2 [4]mode3 [5]mode4 [6]mode5 [7]mode6
 																								[8]mode1 	[9]mode2 	[10]mode3 [11]mode4 [12]mode5 [13]mode6
 																								[14]mode1 [15]mode2 [16]mode3 [17]mode4 [18]mode5 [19]mode6	
 	
@@ -76,28 +79,28 @@
 	>>> import numpy as np
 	>>>
 	>>> nus = pd.read_csv('./nusselt_200000000_4.3_1024_018to033.asc', sep='\\s+', header=0, 
-													usecols=[0,1,2,3,4,5], names=['t','vol','top','bot','epsu','epst'])
+	usecols=[0,1,2,3,4,5], names=['t','vol','top','bot','epsu','epst'])
 	>>>
-	>>> nus.to_hdf('./nusselt_200000000_4.3_1024_018to033.h5', '/nus', table=True, 
-									mode='w', compression='blosc:lz4', complevel=9, fletcher32=True)
+	>>> nus.to_hdf('./nusselt_200000000_4.3_1024_018to033.h5', '/nus', table=True, 	
+		mode='w', compression='blosc:lz4', complevel=9, fletcher32=True)
 	>>>
 	>>> glb = pd.read_csv('./global_50000000_3_512_016to186.asc', sep='\\s+', header=0, 
-													usecols=[0,1,2,5,6,7,9,10,12,13,14], names=['t','l2d','ekin','phiy','epot','bpot','phid','etmp','m2d','ia2d','ib2d'])
+		usecols=[0,1,2,5,6,7,9,10,12,13,14], names=['t','l2d','ekin','phiy','epot','bpot','phid','etmp','m2d','ia2d','ib2d'])
 	>>>
 	>>> glb.to_hdf('./global_50000000_3_512_016to186.h5', '/glb', table=True, 
-								mode='w', compression='blosc:lz4', complevel=9, fletcher32=True)
+		mode='w', compression='blosc:lz4', complevel=9, fletcher32=True)
 
 	>>> moda = pd.read_csv('./modal_50000000_4.3_512_060to259.asc', sep='\\s+',header=0,
-		                 names=['t',
-		                        'k1a','k2a','k3a','k4a','k5a','k6a',
-		                        'k1b','k2b','k3b','k4b','k5b','k6b',
-		                        'k1c','k2c','k3c','k4c','k5c','k6c'])
+		names=['t',
+			'k1a','k2a','k3a','k4a','k5a','k6a',
+		        'k1b','k2b','k3b','k4b','k5b','k6b',
+		        'k1c','k2c','k3c','k4c','k5c','k6c'])
 	>>>
 	>>> for k in ['k1','k2','k3','k4','k5','k6']:
-		  	moda[k]=-moda[k+'a']+moda[k+'b']-moda[k+'c']
-		  	modb = moda.drop([k+'a',k+'b',k+'c'], axis=1)
+		moda[k]=-moda[k+'a']+moda[k+'b']-moda[k+'c']
+		modb = moda.drop([k+'a',k+'b',k+'c'], axis=1)
 	>>>
 	>>> modb.to_hdf('./modal_50000000_4.3_512_060to259.h5', '/modb', table=True, 
-									mode='w', compression='blosc:lz4', complevel=9, fletcher32=True)
+		mode='w', compression='blosc:lz4', complevel=9, fletcher32=True)
 
 	------------------------------------------------------------------------------
