@@ -1,0 +1,203 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\newcommand{\prob}[1]{\mathrm{Prob}\lbrace #1\rbrace}
+\newcommand{\power}[1]{\mathrm{PSD} ( #1 ) }
+\newcommand{\laplace}[1]{\mathcal{L}\lbrace #1\rbrace}
+\newcommand{\expected}[1]{\mathrm{E}[ #1 ]}
+\newcommand{\variance}[1]{\mathrm{V}[ #1 ]}
+\newcommand{\heaviside}[1]{\mathrm{\theta}\left( #1 \right)}
+
+\begin{document}
+
+  \section{ General Renewal Process }
+
+  \subsection{ Asymptotic Distribution }
+
+  Consider the following signal
+  \begin{equation}
+    u(t) = \chi_k, \mbox{ with } t \in [T_k, T_{k+1}], \mbox{ and } \chi_{k+1} = -\chi_k
+  \end{equation}
+  The times $T_i$ are considered independent and identically distributed random
+  variables with expected mean value $\expected{T_i} = \mu$, variance
+  $\variance{T_i} = \sigma$, probability density $q(t)$ and cumulative
+  probability density $Q(t)$, while $N(t)$ is the number of events inside the
+  interval $[0,t)$. We also consider the waiting time to the n-th event.
+  \begin{equation}
+    G_n = T_1 + T_2 + \cdots + T_n
+  \end{equation}
+  such that
+  \begin{equation}
+    \prob{G_n > t} = \prob{N(t) < n}
+  \end{equation}
+  It can be shown that the distribution of $N(t)$ as $t\to\infty$ is
+  asymptotically normal with expected mean value $\expected{N(t)} = t/\mu$ and
+  variance $\variance{N(t)} = \sigma^2 t/\mu^3$.
+
+  \subsection{ Relation between the autocorrelation function and the power spectrum}
+
+  In applied mathematics, the Wiener–Khinchin theorem, states that the
+  autocorrelation function of a wide-sense-stationary random process has a
+  spectral decomposition given by the power spectrum of that process
+  \begin{equation}
+    \power{\omega} = \int_{-\infty}^{\infty} C(t) \exp{(-i\omega t)} ~dt, \mbox{ with }
+    \omega = 2\pi f
+  \end{equation}
+  where the autocorrelation function reads as
+  \begin{equation}
+    C(t) \equiv \frac{1}{T_f}\int_0^{T_f} u(t')u(t+t') dt'
+  \end{equation}
+  The value $u(t')u(t+t')$ may be written as $\chi_k\chi_l$, where $t'\in [T_l, T_{l+1})$
+  and $t+t'\in [T_k, T_{k+1})$. The idea is to approximate the autocorrelation
+  function using the probability distribution $q(\tau)$ by considering only the
+  time intervals where $\chi_k\chi_l > 0$,
+  \begin{equation}
+    C(t) \approx \frac{1}{\mu} \int_t^{T_f} (\tau - t) q(\tau) d\tau
+  \end{equation}
+
+  Let us suppose that $q(\tau) = K \tau^{-\beta}$ where $K$ is some
+  proportionality constant. Integration of equation (6) leaves
+  \begin{equation}
+    C(t) \approx \frac{K}{\mu} \frac{(2-\beta)(1-\beta)}{(2-\beta)(1-\beta)} t^{2-\beta}, \mbox{ with }
+    \beta > 2
+  \end{equation}
+  \begin{align*}
+    \power{f} &\sim \int_{-\infty}^{\infty} t^{2-\beta} \exp{(-i\omega t)} ~dt
+    \\
+                  &\sim f^{\beta-3} \int_{-\infty}^{\infty} u^{2-\beta} \exp{(-iu)} ~du
+  \end{align*}
+  Suggesting that the power spectrum decays as $\alpha = \beta - 3$ for $2 < \beta$.
+  A similar expression may be recovered for $1 < \beta < 2$.
+
+  \paragraph{Question: } a) Does $q(\tau) \sim \tau^{-\beta}$ fits to any of our
+  observations? b) How about $\power{f} \sim f^{-\alpha}$? If so, for which
+  frequency range?
+
+
+  \subsection{ A model for the probability distribution $q(t)$}
+
+  Let us consider the survival function as the probability that an event will
+  survive beyond a time $t$.
+  \begin{equation}
+    s(t) = \prob{T_i > t} = 1 - Q(t)
+  \end{equation}
+  Also consider the hazard function as the instantaneous failure rate
+  \begin{equation}
+    h(t) = \lim_{dt\to 0} \frac{\prob{t < T_i < t + dt}}{dt} \frac{1}{s(t)} = \frac{q(t)}{s(t)}
+  \end{equation}
+  also expressed as a cumulative hazard function
+  \begin{equation}
+    \Lambda(t) = \int_0^t h(t) dt = -\log{(s(t))}
+  \end{equation}
+
+  The example given by [Herault] consists in two attractors in the phase-space:
+  one attractor A, corresponding to the value $u=+1$, and another attractor B,
+  corresponding to the value $u=-1$. The system moves from one attractor to the
+  other with a given probability $\Gamma(t)$, which corresponds precisely to
+  the hazard function $h(t)$, while the probability function $P(t)=\Gamma(t)f(t)$
+  corresponds precisely to the expression above $q(t)= s(t)h(t)$.
+
+  \smallskip
+
+  Let us assume a constant hazard rate $h(t)=\lambda$, meaning the probability
+  of observing a future event does not event on the time passed from the previous
+  event, i.e. the system has no memory of previous events. In such case,
+  \begin{align}
+    h(t) &= \lambda
+    \\
+    \Lambda(t) &= \int_0^t h(t) dt = \lambda t
+    \\
+    s(t) &= \exp{(-\Lambda(t))} = \exp{(-\lambda t)}
+    \\
+    q(t) &= s(t)h(t) = \lambda \exp{(-\lambda t)}
+  \end{align}
+  one obtains the Exponential distribution.
+
+  Now, let us assume a hazard rate $h(t)$ that is uniformly distributed between
+  two values $\lambda_1$ and $\lambda_2$,
+  \begin{align}
+    h(t) &=
+    \begin{cases}
+      \frac{1}{\lambda_2 - \lambda_1},& \mbox{ for } \lambda_1 < t < \lambda_2
+      \\
+      0 ,&\mbox{ otherwise }
+    \end{cases}
+    \\
+    \Lambda(t) &= \int_0^t h(t) dt =
+    \frac{(t - \lambda_1) - (t - \lambda_2)\heaviside{t - \lambda_2}}{\lambda_2 - \lambda_1} \heaviside{t - \lambda_1}
+    \\
+    s(t) &= \exp{(-\Lambda(t))} = \exp{\left(
+    -\frac{(t - \lambda_1) - (t - \lambda_2)\heaviside{t - \lambda_2}}{\lambda_2 - \lambda_1} \heaviside{t - \lambda_1}
+    \right)}
+    \\
+    q(t) &= s(t)h(t) =
+    \begin{cases}
+      \frac{1}{\lambda_2 - \lambda_1}
+      \exp{\left(
+      -\frac{t - \lambda_1}{\lambda_2 - \lambda_1}
+      \right)},& \mbox{ for } \lambda_1 < t < \lambda_2
+      \\
+      0 ,&\mbox{ otherwise }
+    \end{cases}
+  \end{align}
+
+  Now, [Herault] considers a system with some form of memory given by
+  \begin{align}
+    h(t) &= \frac{\nu}{\theta + t}
+    \\
+    \Lambda(t) &= \int_0^t h(t) dt = -\log{\left(\frac{\theta}{\theta + t}\right)^\nu}
+    \\
+    s(t) &= \exp{(-\Lambda(t))} = \left(\frac{\theta}{\theta + t}\right)^\nu
+    \\
+    q(t) &= s(t)h(t) = \frac{\nu \theta^\nu }{(\theta + t)^{\nu+1}}
+  \end{align}
+
+  In his thesis, [Herault] considers the case where moving from A to B, and
+  moving from B to A, have different probabilities
+  \begin{equation}
+    h_{A\to B}(t) = \frac{\nu_1}{\theta + t}, \mbox{ and }
+    h_{B\to A}(t) = \frac{\nu_2}{\theta + t}
+  \end{equation}
+  and uses Monte Carlo simulations to study the case with $\nu_1=\nu_2$,
+  $\nu_1<\nu_2$, and $\nu_1\ll\nu_2$. Two different behaviours are observed: the
+  proposed $\alpha+\beta=3$ for symmetric configurations, and $\alpha-\beta=1$
+  for the strongly asymmetric configurations, the latter being more relevant for
+  burst intermittent dynamics.
+
+  %
+  % \paragraph{What other possibilities?}
+  % Let us consider the hazard function for the Weibull distribution
+  % \begin{align}
+  %   h(t) &= \gamma x^{\gamma-1}
+  %   \\
+  %   \Lambda(t) &= \int_0^t h(t) dt = t^\gamma
+  %   \\
+  %   s(t) &= \exp{(-\Lambda(t))} =  \exp{(-t^\gamma)}
+  %   \\
+  %   q(t) &= s(t)h(t) = \gamma x^{\gamma-1} \exp{(-t^\gamma)}
+  % \end{align}
+  % If $\gamma<1$, the probability of observing future events decreases with time
+  % and {\it vice versa}. Note that $\gamma=1$ corresponds to a Poisson process.
+  %
+  %  Let us consider the following hazard rate
+  %  \begin{align}
+  %    h(t) &= \frac{\frac{1}{t\sigma}\phi\left(\frac{\ln t}{\sigma}\right)}{\Phi\left(-\frac{\ln t}{\sigma}\right)}
+  %    \\
+  %    \Lambda(t) &= \int_0^t h(t) dt = -\ln{\left(1 - \Phi\left(\frac{\ln t}{\sigma}\right) \right)}
+  %    \\
+  %    s(t) &= \exp{(-\Lambda(t))} =  1 - \Phi\left(\frac{\ln t}{\sigma}\right)
+  %    \\
+  %    q(t) &= s(t)h(t) = \frac{1}{t\sigma}\phi\left(\frac{\ln t}{\sigma}\right)
+  %  \end{align}
+  %  where $\phi(t)=\frac{e^{-\frac{(x-\mu)^2}{2\sigma^2}}}{\sigma\sqrt{2\pi}}$ is the probability density function of the normal
+  %  distribution and $\Phi(t)$ is the corresponding cumulative density function.
+  %
+
+
+\end{document}
